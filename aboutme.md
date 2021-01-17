@@ -4,13 +4,14 @@ title: About me
 subtitle: Why you'd want to go on a date with me
 ---
 
-My name is Inigo Montoya. I have the following qualities:
+### In brief
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+Hello, my name is Khoa Pham. Recently, I completed a PhD in Mathematics at the University of Toronto, working in geometric representation theory.
+Currently, I am looking for data analyst, data science, and machine learning opportunities.
 
-What else do you need?
+### Why Random Thoughts?
+It is a platform for me to write about the things I learn. I love learning new things, and writing about them is personally the
+most fun and effective way to absorb the information.
 
-### My story
-
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](https://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+### Other things I like
+I'm also a gaming enthusiast. I enjoy video games, board games, and running Dungeons and Dragons. Perhaps, I can write about them as well.
