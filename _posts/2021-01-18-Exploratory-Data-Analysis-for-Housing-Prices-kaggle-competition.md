@@ -1,15 +1,16 @@
 # Exploratory data analysis on the Kaggle Housing Prices competition
 
-In this notebook, I want to learn Exploratory Data Analysis (EDA) by seeing it in action with data from the [Housing Prices Kaggle competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques).
+In this notebook, I want to perform Exploratory Data Analysis (EDA) with data from the [Housing Prices Kaggle competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques). Note that the analysis is far from complete, but can serve as a starting point.
 
-Aside from my own attempt, here is a list of Kaggle kernels where I got a lot of inspiration from:
-* [Comprehensive data exploration with Python](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python)
-
+Aside from my own attempt, I also got a lot of inspiration from [Comprehensive data exploration with Python](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python).
 
 ---------------------------
 
 ## Table of contents
-
+1. [Univariate visualization](#univiz)
+2. [Multivariate visualization](#multiviz)
+3. [Some feature analysis](#featanalysis)
+4. [Brief look at missing data](#missingdata)
 
 
 ```python
@@ -25,204 +26,7 @@ import scipy as scp
 ```python
 # read the training set into a pd dataframe
 train = pd.read_csv('Data/train.csv', index_col=0)
-train.head()
 ```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>MSSubClass</th>
-      <th>MSZoning</th>
-      <th>LotFrontage</th>
-      <th>LotArea</th>
-      <th>Street</th>
-      <th>Alley</th>
-      <th>LotShape</th>
-      <th>LandContour</th>
-      <th>Utilities</th>
-      <th>LotConfig</th>
-      <th>...</th>
-      <th>PoolArea</th>
-      <th>PoolQC</th>
-      <th>Fence</th>
-      <th>MiscFeature</th>
-      <th>MiscVal</th>
-      <th>MoSold</th>
-      <th>YrSold</th>
-      <th>SaleType</th>
-      <th>SaleCondition</th>
-      <th>SalePrice</th>
-    </tr>
-    <tr>
-      <th>Id</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>60</td>
-      <td>RL</td>
-      <td>65.0</td>
-      <td>8450</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>Inside</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>208500</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>20</td>
-      <td>RL</td>
-      <td>80.0</td>
-      <td>9600</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>FR2</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>5</td>
-      <td>2007</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>181500</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>60</td>
-      <td>RL</td>
-      <td>68.0</td>
-      <td>11250</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>Inside</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>9</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>223500</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>70</td>
-      <td>RL</td>
-      <td>60.0</td>
-      <td>9550</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>Corner</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2006</td>
-      <td>WD</td>
-      <td>Abnorml</td>
-      <td>140000</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>60</td>
-      <td>RL</td>
-      <td>84.0</td>
-      <td>14260</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>FR2</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>12</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>250000</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 80 columns</p>
-</div>
-
-
 
 
 ```python
@@ -327,7 +131,7 @@ We will explore, with a slight view toward data visualization.
 1. Univariate visualization:
 2. Multivariate visualization
 
-### Univariate visualization
+### Univariate visualization <a name="univiz">
 
 
 ```python
@@ -352,11 +156,6 @@ train['SalePrice'].describe()
 
 
 ```python
-# Compute moments (if desired)
-```
-
-
-```python
 # look at SalePrice distribution with histogram
 plt.figure(figsize=(20,10))
 plt.title('SalePrice distribution')
@@ -371,7 +170,7 @@ sns.histplot(train['SalePrice'])
 
 
 
-![png](/images/output_8_1.png)
+![png](/images/housingpricesEDA/output_7_1.png)
 
 
 
@@ -390,10 +189,10 @@ sns.violinplot(y=train['SalePrice'],ax=axes[1])
 
 
 
-![png](/images/output_9_1.png)
+![png](/images/housingpricesEDA/output_8_1.png)
 
 
-From the histogram, we can guess that `SalePrice` probably follows a log-normal distribution. One way to verify this using [Kolmogorov-Smirnov test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kstest.html).
+From the histogram, we might want to guess that `SalePrice` follows a log-normal distribution. One way to verify this using [Kolmogorov-Smirnov test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kstest.html).
 
 
 ```python
@@ -440,7 +239,7 @@ stats.probplot(np.log(1+train.SalePrice),plot=plt)
 
 
 
-![png](/images/output_13_1.png)
+![png](/images/housingpricesEDA/output_12_1.png)
 
 
 
@@ -460,7 +259,7 @@ sns.histplot(train['LotArea'])
 
 
 
-![png](/images/output_14_1.png)
+![png](/images/housingpricesEDA/output_13_1.png)
 
 
 
@@ -477,7 +276,7 @@ sns.countplot(x='BedroomAbvGr',data=train)
 
 
 
-![png](/images/output_15_1.png)
+![png](/images/housingpricesEDA/output_14_1.png)
 
 
 
@@ -485,7 +284,7 @@ sns.countplot(x='BedroomAbvGr',data=train)
 # It makes sense to combine MoSold and YrSold into a single DateSold column
 dates=train['MoSold'].astype(str)+ '-' +train['YrSold'].astype(str)
 dates = pd.to_datetime(dates, format='%m-%Y').dt.to_period('M')
-train.DtSold = dates
+train['DtSold'] = dates
 plt.figure(figsize=(5,10))
 dates.value_counts().sort_index().plot(kind='barh')
 ```
@@ -498,12 +297,12 @@ dates.value_counts().sort_index().plot(kind='barh')
 
 
 
-![png](/images/output_16_1.png)
+![png](/images/housingpricesEDA/output_15_1.png)
 
 
 Interestingly, there are more entries of sold houses in the Spring-Summer months of May, June and July. This information doesn't seem particularly useful for us, but it is interesting nonetheless.
 
-### Multivariate Visualization
+### Multivariate Visualization <a name="multiviz">
 
 We aim to show the relationships between `SalePrice` and the other features.
 
@@ -525,7 +324,7 @@ sns.scatterplot(data=train, x='LotArea', y='SalePrice',hue='BedroomAbvGr',
 
 
 
-![png](/images/output_19_1.png)
+![png](/images/housingpricesEDA/output_18_1.png)
 
 
 *Note*: somewhat as expected, we see that `SalePrice` have positive correlations with `LotArea` and `BedroomAbvGr`. In other words, larger areas and/or more rooms means higher sale price.
@@ -544,10 +343,10 @@ train.groupby('DtSold').SalePrice.mean().plot()
 
 
 
-![png](/images/output_21_1.png)
+![png](/images/housingpricesEDA/output_20_1.png)
 
 
-### Some features analysis
+### Some feature analysis <a name="featanalysis">
 We can try to find the correlations between each of the features and `SalePrice`. For this, let us work with the numerical features.
 
 
@@ -584,17 +383,14 @@ sns.heatmap(train.corr(),vmax=.8, square=True)
 ```
 
 
-    ---------------------------------------------------------------------------
-
-    NameError                                 Traceback (most recent call last)
-
-    <ipython-input-1-c53af7b25336> in <module>
-          1 # columns correlations
-    ----> 2 plt.figure(figsize=(12,12))
-          3 sns.heatmap(train.corr(),vmax=.8, square=True)
 
 
-    NameError: name 'plt' is not defined
+    <AxesSubplot:>
+
+
+
+
+![png](/images/housingpricesEDA/output_23_1.png)
 
 
 
@@ -613,7 +409,7 @@ sns.barplot(x=sale_corr[:-1], y=sale_corr.index[:-1])
 
 
 
-![png](/images/output_25_1.png)
+![png](/images/housingpricesEDA/output_24_1.png)
 
 
 
@@ -648,15 +444,15 @@ sns.pairplot(train[high_corr], height=2.5)
 
 
 
-    <seaborn.axisgrid.PairGrid at 0x23f73232f40>
+    <seaborn.axisgrid.PairGrid at 0x2531747f760>
 
 
 
 
-![png](/images/output_27_1.png)
+![png](/images/housingpricesEDA/output_26_1.png)
 
 
-### Understanding missing data
+### Brief look at missing data <a name="missingdata">
 
 We aim to look at missing data. There are various reasons why data can be missing: simply randomly missing, or logically missing due to how the nature of the feature or due to the way data was recorded.
 
@@ -679,16 +475,16 @@ missing_train/train.shape[0]
     Fence           0.807534
     FireplaceQu     0.472603
     LotFrontage     0.177397
+    GarageYrBlt     0.055479
     GarageType      0.055479
+    GarageQual      0.055479
     GarageCond      0.055479
     GarageFinish    0.055479
-    GarageQual      0.055479
-    GarageYrBlt     0.055479
     BsmtFinType2    0.026027
     BsmtExposure    0.026027
-    BsmtQual        0.025342
     BsmtCond        0.025342
     BsmtFinType1    0.025342
+    BsmtQual        0.025342
     MasVnrArea      0.005479
     MasVnrType      0.005479
     Electrical      0.000685
@@ -748,8 +544,3 @@ missing_test
 In general, it is not clear how important these features with missing data are. The first thing to go might simply be dropping these features. At test time, there are some missing data in some other features (the number is low, so we can probably say that this is due to chance/error, we can deal with this later).
 
 Following the [kernel](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python), it makes sense to keep only `Electrical`, where we remove training samples with missing `Electrical` data. Of course, what we are saying here is quite vague, and potentially incorrect. But, it is certainly a starting point.
-
-
-```python
-
-```
