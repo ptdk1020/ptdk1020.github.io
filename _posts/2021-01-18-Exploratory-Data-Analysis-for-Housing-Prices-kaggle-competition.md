@@ -1,4 +1,7 @@
-# Exploratory data analysis on the Kaggle Housing Prices competition
+---
+layout: post
+tags: [EDA, visualization]
+---
 
 In this notebook, I want to perform Exploratory Data Analysis (EDA) with data from the [Housing Prices Kaggle competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques). Note that the analysis is far from complete, but can serve as a starting point.
 
