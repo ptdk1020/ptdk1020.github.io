@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: post 
 tags: [EDA, visualization]
 ---
 
@@ -546,4 +546,4 @@ missing_test
 
 In general, it is not clear how important these features with missing data are. The first thing to go might simply be dropping these features. At test time, there are some missing data in some other features (the number is low, so we can probably say that this is due to chance/error, we can deal with this later).
 
-Following the [kernel](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python), it makes sense to keep only `Electrical`, where we remove training samples with missing `Electrical` data. Of course, what we are saying here is quite vague, and potentially incorrect. But, it is certainly a starting point.
+Following the [kernel](https://www.kaggle.com/pmarcelino/comprehensive-data-exploration-with-python), it makes sense to keep only `Electrical`, where we remove training samples with missing `Electrical` data. Of course, what we are saying here is quite vague. But, it is certainly a starting point.
