@@ -15,6 +15,7 @@ author: Khoa Pham
 
 navbar-links:
   About Me: "aboutme"
+  Math: "math"
   #Resources:
   #  - Beautiful Jekyll: "https://beautifuljekyll.com"
   #  - Learn markdown: "https://www.markdowntutorial.com/"
