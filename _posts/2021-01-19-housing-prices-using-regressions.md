@@ -1,8 +1,3 @@
----
-layout:
-tags: data processing, linear models
----
-
 ## Table of contents:
 1. [Introduction](#intro)
 2. [Some data processing](#dataprocessing)
@@ -124,6 +119,13 @@ train.drop('SalePrice',axis=1,inplace=True)
 test = pd.concat([num_test,oh_test],axis=1)
 ```
 
+
+```python
+# for convenience, let us save these files
+train.to_csv("Data/train_imputed.csv")
+test.to_csv("Data/test_imputed.csv")
+```
+
 *Note*: It might have been a better idea to use sklearn pipeline to do the data processing.
 
 ### Model <a name="model">
@@ -141,7 +143,7 @@ from sklearn.model_selection import cross_val_score, StratifiedKFold, \
                                     validation_curve
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
 ```
 
 We have the following [plot_learning_curve function](https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html#sphx-glr-auto-examples-model-selection-plot-learning-curve-py). I modified the call on `learning_curve` to change to scoring to root mean squared error.
@@ -169,8 +171,8 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     train_scores_std = -np.std(train_scores, axis=1)
     test_scores_mean = -np.mean(test_scores, axis=1)
     test_scores_std = -np.std(test_scores, axis=1)
-    fit_times_mean = -np.mean(fit_times, axis=1)
-    fit_times_std = -np.std(fit_times, axis=1)
+    fit_times_mean = np.mean(fit_times, axis=1)
+    fit_times_std = np.std(fit_times, axis=1)
 
     # Plot learning curve
     axes[0].grid()
@@ -233,12 +235,12 @@ plt.show()
 ```
 
 
-![png](/images/housingpricesregressions/output_14_0.png)
+![png](/images/housingpricesregressions/output_15_0.png)
 
 
 
 ```python
-preds = np.expm1(model.predict(test))
+preds = np.expm1(LinearRegression().fit(train,y).predict(test))
 preds = pd.DataFrame(preds,index=test.index)
 preds.columns = ['SalePrice']
 preds.to_csv('linearregression.csv')
@@ -265,7 +267,7 @@ plt.show()
 ```
 
 
-![png](/images/housingpricesregressions/output_18_0.png)
+![png](/images/housingpricesregressions/output_19_0.png)
 
 
 
@@ -302,16 +304,16 @@ plt.show()
 ```
 
 
-![png](/images/housingpricesregressions/output_21_0.png)
+![png](/images/housingpricesregressions/output_22_0.png)
 
 
 
 ```python
 model = Ridge(alpha=10).fit(train,y)
-preds = np.expm1(model.predict(test))
-preds = pd.DataFrame(preds,index=test.index)
-preds.columns = ['SalePrice']
-preds.to_csv('ridgeregression.csv')
+ridge_preds = np.expm1(model.predict(test))
+ridge_preds = pd.DataFrame(ridge_preds,index=test.index)
+ridge_preds.columns = ['SalePrice']
+ridge_preds.to_csv('ridgeregression.csv')
 ```
 
 Submitting this answer gives a score of 0.125, which is a great improvement. Looking at the learning curve, we see that the gap between the training curve and the cross-validation curve is much smaller.
@@ -333,7 +335,7 @@ plt.show()
 ```
 
 
-![png](/images/housingpricesregressions/output_24_0.png)
+![png](/images/housingpricesregressions/output_25_0.png)
 
 
 
@@ -344,16 +346,16 @@ cv_lasso
 
 
 
-    0.0001    0.126506
-    0.0003    0.121403
-    0.0005    0.121241
-    0.0010    0.123212
-    0.0030    0.134681
-    0.0050    0.141343
-    0.0100    0.152826
-    0.0300    0.173652
-    0.0500    0.183289
-    0.1000    0.208409
+    0.0001    0.128700
+    0.0003    0.123794
+    0.0005    0.122678
+    0.0010    0.124244
+    0.0030    0.136213
+    0.0050    0.142389
+    0.0100    0.153818
+    0.0300    0.174189
+    0.0500    0.184039
+    0.1000    0.209220
     dtype: float64
 
 
@@ -368,7 +370,7 @@ plt.show()
 ```
 
 
-![png](/images/housingpricesregressions/output_27_0.png)
+![png](/images/housingpricesregressions/output_28_0.png)
 
 
 
@@ -382,5 +384,91 @@ lasso_preds.to_csv('lassoregression.csv')
 
 Submitting this gives a score of 0.1246, which is a slight improvement upon our Ridge score.
 
+#### Elastic Net
+Elastic net regularization combines $L^1$ and $L^2$ regularization. In the `sklearn` implementation, the two parameters to be considered are `alpha`=a+b and `l1_ratio`=a/(a+b), where a and b control $L^1$ and $L^2$ regularization respectively.
+
+
+```python
+# initialize parameters for GridSearch
+params = {"alpha":[0.001,0.003,0.005,0.01,0.03,0.05,0.1,0.3,0.5,1,3,5],
+          "l1_ratio": [0.001,0.003,0.005,0.01,0.03,0.05,0.1,0.3,0.5,1,3,5],
+         }
+
+# gridsearch
+gcv = GridSearchCV(ElasticNet(), params,cv=10, n_jobs=-1,verbose=1,
+                  scoring="neg_root_mean_squared_error")
+gcv.fit(train,y)
+```
+
+    Fitting 10 folds for each of 144 candidates, totalling 1440 fits
+
+
+    [Parallel(n_jobs=-1)]: Using backend LokyBackend with 6 concurrent workers.
+    [Parallel(n_jobs=-1)]: Done  38 tasks      | elapsed:    3.9s
+    [Parallel(n_jobs=-1)]: Done 256 tasks      | elapsed:    9.0s
+    [Parallel(n_jobs=-1)]: Done 1248 tasks      | elapsed:   18.8s
+    [Parallel(n_jobs=-1)]: Done 1440 out of 1440 | elapsed:   19.7s finished
+
+
+
+
+
+    GridSearchCV(cv=10, estimator=ElasticNet(), n_jobs=-1,
+                 param_grid={'alpha': [0.001, 0.003, 0.005, 0.01, 0.03, 0.05, 0.1,
+                                       0.3, 0.5, 1, 3, 5],
+                             'l1_ratio': [0.001, 0.003, 0.005, 0.01, 0.03, 0.05,
+                                          0.1, 0.3, 0.5, 1, 3, 5]},
+                 scoring='neg_root_mean_squared_error', verbose=1)
+
+
+
+
+```python
+gcv.best_params_, -gcv.best_score_
+```
+
+
+
+
+    ({'alpha': 0.001, 'l1_ratio': 0.3}, 0.12155441518573948)
+
+
+
+
+```python
+title = "Learning curve (ElasticNet Regression)"
+plot_learning_curve(ElasticNet(alpha=0.001,l1_ratio=0.3),
+                    title,train,y,cv=10)
+plt.show()
+```
+
+
+![png](/images/housingpricesregressions/output_33_0.png)
+
+
+
+```python
+model = ElasticNet(alpha=0.001,l1_ratio=0.3).fit(train,y)
+elastic_preds = np.expm1(model.predict(test))
+elastic_preds = pd.DataFrame(elastic_preds,index=test.index)
+elastic_preds.columns = ['SalePrice']
+elastic_preds.to_csv('elasticregression.csv')
+```
+
+Submitting this gives a score of 0.1249, which is similiar to the Lasso and Ridge scores.
+
+#### Stacking
+Linear combination of different solutions could improve the predictions.
+
+
+```python
+stacked_preds = 0.7*lasso_preds + 0.3*ridge_preds
+stacked_preds.to_csv('stacked.csv')
+```
+
+Submitting this gives the best score of 0.1241, which is a slight improvement.
+
 ### Conclusion
-Linear models seem to work quite well, with some data processing, and no feature engineering. With some regularization using Ridge and Lasso regressions, we obtained an approximate score of 0.125, which are quite nice. We can probably push a little further. I will update this post with some discussions on Elastic net, and stacked regression.
+Linear models seem to work quite well, with some data processing, and no feature engineering. With some regularization using Ridge, Lasso, and ElasticNet regressions, we obtained an approximate score of 0.125, which are quite nice. We also tried stacking, which gave a slight improvement.
+
+At this point, we could try our hand at some feature analysis and engineering, or perhaps other more flexible machine learning algorithms. I will return to these in future posts.
