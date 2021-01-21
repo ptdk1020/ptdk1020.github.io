@@ -458,7 +458,7 @@ elastic_preds.to_csv('elasticregression.csv')
 Submitting this gives a score of 0.1249, which is similiar to the Lasso and Ridge scores.
 
 #### Stacking
-Linear combination of different solutions could improve the predictions.
+Linear combination of different predictors could improve the prediction.
 
 
 ```python
