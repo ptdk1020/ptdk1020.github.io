@@ -294,7 +294,7 @@ cv_ridge
 
 
 
-According to the validation curve, the cross validation score seems to be best  at around `alpha`$=10$.
+According to the validation curve, the cross validation score seems to be best  at around `alpha`=10.
 
 
 ```python
