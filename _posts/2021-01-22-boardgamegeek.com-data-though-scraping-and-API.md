@@ -113,7 +113,7 @@ index_unique
 
 
 
-<div style="overflow:scroll">
+<div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -342,7 +342,7 @@ Let us take a look at these tables.
 
 
 ```python
-# the "main" games table
+# the "main" games table info
 all_data[0].info()
 ```
 
