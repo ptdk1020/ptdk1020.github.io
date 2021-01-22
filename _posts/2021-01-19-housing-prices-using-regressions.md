@@ -251,7 +251,7 @@ Submitting the prediction gives us a public score of 0.428, which is not even as
 Looking at the learning curve, we see that there is that a gap between the scores, meaning that we have a high variance problem. Therefore, it makes sense to try some regularization.
 
 #### Ridge Regression
-Ridge regression is linear least squared with $L^2$ regularization, with hyperparameter `alpha`.
+Ridge regression is linear least squared with L2 regularization, with hyperparameter `alpha`.
 
 
 ```python
@@ -319,7 +319,7 @@ ridge_preds.to_csv('ridgeregression.csv')
 Submitting this answer gives a score of 0.125, which is a great improvement. Looking at the learning curve, we see that the gap between the training curve and the cross-validation curve is much smaller.
 
 #### Lasso Regression
-Lasso Regression consists of linear least squares together with $L^1$ regularization, with hyperparameter also denoted by `alpha`.
+Lasso Regression consists of linear least squares together with L1 regularization, with hyperparameter also denoted by `alpha`.
 
 
 ```python
@@ -360,7 +360,7 @@ cv_lasso
 
 
 
-According to the validation curve, the cross validation score seems to be best  at around `alpha`$=0.0005$.
+According to the validation curve, the cross validation score seems to be best  at around `alpha`=0.0005.
 
 
 ```python
@@ -385,7 +385,7 @@ lasso_preds.to_csv('lassoregression.csv')
 Submitting this gives a score of 0.1246, which is a slight improvement upon our Ridge score.
 
 #### Elastic Net
-Elastic net regularization combines $L^1$ and $L^2$ regularization. In the `sklearn` implementation, the two parameters to be considered are `alpha`=a+b and `l1_ratio`=a/(a+b), where a and b control $L^1$ and $L^2$ regularization respectively.
+Elastic net regularization combines L1 and L2 regularization. In the `sklearn` implementation, the two parameters to be considered are `alpha`=a+b and `l1_ratio`=a/(a+b), where a and b control L1 and L2 regularization respectively.
 
 
 ```python
