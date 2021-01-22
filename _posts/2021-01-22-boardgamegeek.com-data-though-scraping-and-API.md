@@ -113,7 +113,7 @@ index_unique
 
 
 
-<div>
+<div style="overflow:scroll">
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
