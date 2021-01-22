@@ -6,7 +6,7 @@
 -----------
 
 ### Introduction <a name="intro">
-The problem statement is to use data previded by the [Kaggle competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) to predict housing prices of residential homes in Ames, Iowa. This data is from the [Ames Housing dataset](http://jse.amstat.org/v19n3/decock.pdf).
+The problem statement is to use data provided by the [Kaggle competition](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) to predict housing prices of residential homes in Ames, Iowa. This data is from the [Ames Housing dataset](http://jse.amstat.org/v19n3/decock.pdf).
 In another post, I performed some Exploratory Data Analysis on the training set.
 
 There are many great Kaggle kernels for this. For our starting point, our goal in this post is to approach the problem using only linear models. It is important to note that our post is heavily influenced by the great [notebook](https://www.kaggle.com/apapiu/regularized-linear-models) written by A. Papiu. There is a small difference in methodology in the data processing step, which will be discussed later.
