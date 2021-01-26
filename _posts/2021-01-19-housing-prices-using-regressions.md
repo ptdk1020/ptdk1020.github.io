@@ -457,7 +457,7 @@ elastic_preds.to_csv('elasticregression.csv')
 
 Submitting this gives a score of 0.1249, which is similiar to the Lasso and Ridge scores.
 
-#### Stacking
+#### Combination
 Linear combination of different predictors could improve the prediction.
 
 
@@ -469,6 +469,6 @@ stacked_preds.to_csv('stacked.csv')
 Submitting this gives the best score of 0.1241, which is a slight improvement.
 
 ### Conclusion
-Linear models seem to work quite well, with some data processing, and no feature engineering. With some regularization using Ridge, Lasso, and ElasticNet regressions, we obtained an approximate score of 0.125, which are quite nice. We also tried stacking, which gave a slight improvement.
+Linear models seem to work quite well, with some data processing, and no feature engineering. With some regularization using Ridge, Lasso, and ElasticNet regressions, we obtained an approximate score of 0.125, which are quite nice. We also tried combination, which gave a slight improvement.
 
 At this point, we could try our hand at some feature analysis and engineering, or perhaps other more flexible machine learning algorithms. I will return to these in future posts.
