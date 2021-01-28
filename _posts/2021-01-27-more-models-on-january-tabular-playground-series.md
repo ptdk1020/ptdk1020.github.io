@@ -561,7 +561,162 @@ gbm_preds
 
 
 
-Submitting this gives a score of 0.70397, which is a nice improvement upon our previous score. It is also not a big surprise since it is one of the most powever algorthim for tabular data. 
+Submitting this gives a score of 0.70397, which is a nice improvement upon our previous score. It is also not a big surprise since it is one of the most powerful algorthim for tabular data. Much of the extra power of XGBoost comes from hyperparameters tuning. So, we can focus more on it later on. For now, let us try to use a feedforward neural network.
 
-### What is next?
-Much of the power of XGBoost comes from hyperparameters tuning. So, we can focus more on it. Another thing to try is feature transformation and engineering. There are some good advice [here](https://www.kaggle.com/c/tabular-playground-series-jan-2021/discussion/213090). 
+### Trying out a neural net
+
+
+```python
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras import Input
+import tensorflow as tf
+
+nnet = Sequential([
+    Input(shape=(14,)),
+    Dense(16, activation='relu'),
+    # Dropout(0.3),
+    # Dense(16, activation='relu'),
+    Dense(1, activation = 'relu')
+])
+
+nnet.summary()
+```
+
+    Model: "sequential_12"
+    _________________________________________________________________
+    Layer (type)                 Output Shape              Param #   
+    =================================================================
+    dense_29 (Dense)             (None, 16)                240       
+    _________________________________________________________________
+    dense_30 (Dense)             (None, 16)                272       
+    _________________________________________________________________
+    dense_31 (Dense)             (None, 1)                 17        
+    =================================================================
+    Total params: 529
+    Trainable params: 529
+    Non-trainable params: 0
+    _________________________________________________________________
+    
+
+
+```python
+# compiling model
+opt = tf.keras.optimizers.Adam(learning_rate=0.001)
+
+
+nnet.compile(optimizer=opt,loss = "mse", 
+              metrics=[tf.metrics.MeanSquaredError()])
+```
+
+
+```python
+# fitting the model
+history = nnet.fit(train,y,epochs=5,batch_size=16)
+```
+
+    Epoch 1/5
+    18750/18750 [==============================] - 9s 450us/step - loss: 2.5656 - mean_squared_error: 2.5656
+    Epoch 2/5
+    18750/18750 [==============================] - 8s 446us/step - loss: 0.5327 - mean_squared_error: 0.5327
+    Epoch 3/5
+    18750/18750 [==============================] - 8s 427us/step - loss: 0.5282 - mean_squared_error: 0.5282
+    Epoch 4/5
+    18750/18750 [==============================] - 8s 426us/step - loss: 0.5258 - mean_squared_error: 0.5258
+    Epoch 5/5
+    18750/18750 [==============================] - 8s 417us/step - loss: 0.5262 - mean_squared_error: 0.5262
+    
+
+
+```python
+# making and saving prediction
+nnet_preds = pd.DataFrame(nnet.predict(test), index=test.index,
+                       columns = ['target'])
+nnet_preds.to_csv('predictions/simplenet.csv')
+nnet_preds
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>target</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>8.026910</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.615761</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>8.012880</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7.956695</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>8.045378</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>499984</th>
+      <td>8.004407</td>
+    </tr>
+    <tr>
+      <th>499985</th>
+      <td>7.949613</td>
+    </tr>
+    <tr>
+      <th>499987</th>
+      <td>7.706973</td>
+    </tr>
+    <tr>
+      <th>499988</th>
+      <td>7.931010</td>
+    </tr>
+    <tr>
+      <th>499990</th>
+      <td>7.671423</td>
+    </tr>
+  </tbody>
+</table>
+<p>200000 rows × 1 columns</p>
+</div>
+
+
+
+Submitting this gives a score of about 0.725, which is not better than a simple linear regression. 
+
+### What's next?
+One thing to try is to play around withXGBoost hyperparameters tuning. We can also try feature transformation and feature engineering, before applying models. Some good general advice are given [here](https://www.kaggle.com/c/tabular-playground-series-jan-2021/discussion/213090).
