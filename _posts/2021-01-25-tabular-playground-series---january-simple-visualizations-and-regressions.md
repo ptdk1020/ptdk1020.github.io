@@ -457,7 +457,7 @@ plt.show()
 
 
     
-![png](output_15_0.png)
+![png](/images/tabularpost1/output_15_0.png)
     
 
 
