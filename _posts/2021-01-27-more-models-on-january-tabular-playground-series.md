@@ -317,7 +317,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 # hyperparameter tuning, with cross-validation using GridSearchCV
-rf = RandomForestRegressor(n_estimators=100,random_state=42)
+rf = RandomForestRegressor(n_estimators=10,random_state=42)
 
 rf_params = {'max_depth':range(4,11),
              'min_samples_split': range(2,6),
