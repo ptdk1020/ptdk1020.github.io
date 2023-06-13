@@ -6,6 +6,7 @@ import Markdown from '/components/Markdown'
 import {unified} from 'unified'
 import remarkParse from 'remark-parse'
 import remarkMath from 'remark-math'
+import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
 import rehypeMathjax from 'rehype-mathjax'
 import rehypeStringify from 'rehype-stringify'
@@ -48,11 +49,11 @@ export async function getStaticProps({params:{slug}}){
     let contentHtml = await unified()
                             .use(remarkParse)
                             .use(remarkMath)
+                            .use(remarkGfm)
                             .use(remarkRehype)
                             .use(rehypeMathjax)
                             .use(rehypeStringify)
                             .process(content)
-    
     
     contentHtml = String(contentHtml)
 

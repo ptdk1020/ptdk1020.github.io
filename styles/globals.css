@@ -67,7 +67,9 @@ ul {
   padding: 0;
 }
 
-
+table {
+  width: 100;
+}
 
 .nav-container {
   max-width: 80vw;
