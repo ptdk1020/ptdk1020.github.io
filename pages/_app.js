@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }) {
   return  <>
             <Head>
               <title>Welcome</title>
+              <link rel="shortcut icon" href="/icosahedron.png"/>
             </Head>
             <Navbar/>
             <main className="container">

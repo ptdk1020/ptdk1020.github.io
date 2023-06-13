@@ -5,29 +5,31 @@ excerp: "A test post!"
 cover_image: "/images/posts/hello-world.jpg"
 ---
 
-## Hello
+## Hello, World!
 
-This is simply a test post.
+Hi there, this is simply a test post used to test the site deployment. The site is meant to be a place where I write things down for future references. 
 
+The site is built using [Next.js](https://nextjs.org/), the posts are written using Markdown. It is then deployed to Github pages. 
+It took me some time to get syntax highlighting and math display to work, so this post is meant as a display test. 
 
-- a
-- b 
-- c
-
+1. Syntax Highlighting
 
 ```python
-def foo():
-    return
+# python
+def hello_world():
+    return "Hello, World!"
 ```
 
 ```javascript
-function foo(){
-    return
+// javascript
+function helloWorld(){
+    return "Hello, World!"
 }
 ```
 
-Look at $L_0$ in the below formula
+2. Display Euler's formula
 
+For any real number $x$, 
 $$
-L_0 = \frac{1}{2} \rho v^2 S C_L
+e^{ix} = \cos(x) + i\sin(x).
 $$
