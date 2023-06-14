@@ -36,6 +36,6 @@ $$
 
 3. Test image insert
 
-*The below image is the [flavicon](https://www.flaticon.com/free-icons/icosahedron) that I use*.
+*The below image is the [favicon](https://www.flaticon.com/free-icons/icosahedron) that I use*.
 
-![post1](/icosahedron.png "image Favicon")
+![post1](/icosahedron.png "Favicon")
