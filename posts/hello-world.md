@@ -39,3 +39,38 @@ $$
 *The below image is the [favicon](https://www.flaticon.com/free-icons/icosahedron) that I use*.
 
 ![post1](/icosahedron.png "Favicon")
+
+4. Test table display
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>fruit</th>
+      <th>color</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>orange</td>
+      <td>orange</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>apple</td>
+      <td>red</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>lemon</td>
+      <td>yellow</td>
+    </tr>
+  </tbody>
+</table>
+</div>

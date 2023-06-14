@@ -8,6 +8,8 @@ import remarkParse from 'remark-parse'
 import remarkMath from 'remark-math'
 import remarkGfm from 'remark-gfm'
 import remarkRehype from 'remark-rehype'
+import rehypeRaw from 'rehype-raw'
+import rehypeSanitize from 'rehype-sanitize'
 import rehypeMathjax from 'rehype-mathjax'
 import rehypeStringify from 'rehype-stringify'
 
@@ -50,7 +52,9 @@ export async function getStaticProps({params:{slug}}){
                             .use(remarkParse)
                             .use(remarkMath)
                             .use(remarkGfm)
-                            .use(remarkRehype)
+                            .use(remarkRehype, {allowDangerousHtml: true})
+                            .use(rehypeRaw)
+                            // .use(rehypeSanitize) // sanitizing here seems to remove formatting as well
                             .use(rehypeMathjax)
                             .use(rehypeStringify)
                             .process(content)
