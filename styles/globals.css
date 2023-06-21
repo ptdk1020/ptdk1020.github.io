@@ -126,17 +126,25 @@ table {
 
 .posts {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-columns: repeat(2, 1fr); */
+  grid-template-columns: repeat(2,1fr);
   gap: 30px;
   margin-top: 30px;
   margin-bottom: 40px;
-  max-width: 2000vw;
+  max-width: 100vw;
 }
 
 .card {
+  margin-left:auto;
+  margin-right:auto;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width:500px;
+}
+
+.card img{
+  height:75%;
 }
 
 .card-page {
@@ -191,7 +199,7 @@ ol {
   line-height: 2.3;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 900px) {
   .posts {
     grid-template-columns: 1fr;
   }

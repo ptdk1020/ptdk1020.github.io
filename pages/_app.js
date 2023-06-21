@@ -4,7 +4,8 @@ import Navbar from '/components/Navbar'
 import Footer from '/components/Footer'
 import Prism from 'prismjs'
 import "../styles/prism-one-dark.css"
-import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-docker';
 
 export default function App({ Component, pageProps }) {
   return  <>
