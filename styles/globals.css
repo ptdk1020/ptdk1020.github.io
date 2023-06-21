@@ -150,7 +150,7 @@ table {
 
 .card .post-title{
   margin: 10px 0;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .card-page {
@@ -170,9 +170,9 @@ table {
   margin: 10px 0;
 } */
 
-.post-date {
+.card .post-date {
   background: #f4f4f4;
-  /* margin-bottom: 20px; */
+  margin-bottom: 20px;
   padding: 3px 10px;
 }
 
