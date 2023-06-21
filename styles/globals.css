@@ -140,7 +140,7 @@ table {
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width:500px;
-  font-size: calc(1vw*1vh);
+  /* overflow: auto; */
 }
 
 
@@ -151,7 +151,6 @@ table {
 .card .post-title{
   margin: 10px 0;
   margin-bottom: 5px;
-  
 }
 
 .card-page {
@@ -173,7 +172,7 @@ table {
 
 .post-date {
   background: #f4f4f4;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   padding: 3px 10px;
 }
 
