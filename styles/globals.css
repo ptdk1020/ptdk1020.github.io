@@ -126,7 +126,6 @@ table {
 
 .posts {
   display: grid;
-  /* grid-template-columns: repeat(2, 1fr); */
   grid-template-columns: repeat(2,1fr);
   gap: 30px;
   margin-top: 30px;
@@ -141,7 +140,9 @@ table {
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width:500px;
+  font-size: calc(0.5vw + 1vh)
 }
+
 
 .card img{
   height:75%;
@@ -150,6 +151,7 @@ table {
 .card .post-title{
   margin: 10px 0;
   margin-bottom: 5px;
+  
 }
 
 .card-page {

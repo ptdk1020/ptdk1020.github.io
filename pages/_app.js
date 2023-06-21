@@ -12,6 +12,7 @@ export default function App({ Component, pageProps }) {
             <Head>
               <title>Welcome</title>
               <link rel="shortcut icon" href="/icosahedron.png"/>
+              <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
             </Head>
             <Navbar/>
             <main className="container">
