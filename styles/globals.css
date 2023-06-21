@@ -147,6 +147,11 @@ table {
   height:75%;
 }
 
+.card .post-title{
+  margin: 10px 0;
+  margin-bottom: 5px;
+}
+
 .card-page {
   padding: 15px 30px;
 }
@@ -160,9 +165,9 @@ table {
   margin-bottom: 2%;
 }
 
-.post-title {
+/* .post-title {
   margin: 10px 0;
-}
+} */
 
 .post-date {
   background: #f4f4f4;
