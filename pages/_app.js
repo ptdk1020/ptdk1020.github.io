@@ -5,7 +5,8 @@ import Footer from '/components/Footer'
 import Prism from 'prismjs'
 import "../styles/prism-one-dark.css"
 import 'prismjs/components/prism-python'
-import 'prismjs/components/prism-docker';
+import 'prismjs/components/prism-docker'
+import 'prismjs/components/prism-bash'
 
 export default function App({ Component, pageProps }) {
   return  <>
