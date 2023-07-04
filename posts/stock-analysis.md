@@ -1,6 +1,6 @@
 ---
 title: "End-to-End Stock Data Analysis (WIP)"
-date: "June 20 2023"
+date: "July 2, 2023"
 excerp: ""
 cover_image: "/images/posts/stock-analysis/stock-cover.jpg"
 ---
@@ -10,6 +10,7 @@ _**This post is still being updated**_
 ## Table of Contents
 1. [Overview](#overview)
 2. [Setup](#setup)
+3. [Workflow](#workflow)
 
 ## Overview <a name="overview"></a>
 I thought it would be fun to create my own end-to-end cloud-based application to gather and analyze stock data. To do this, I used a Google Cloud Platform account for hosting and free tier [Polygon API](https://polygon.io/) for data gathering. Here is a simple workflow diagram
@@ -54,7 +55,7 @@ To keep things in the same ecosystem, I kept the code on GCP Source Repositories
 ```
 Note that the `.env` file is not committed to the repository.
 
-## Workflow
+## Workflow <a name="workflow"></a>
 ### Docker container
 Once the code is pulled to the instance, I simply create a `.env` file, build the Docker image, and create a Docker container. 
 
@@ -83,15 +84,25 @@ gsutil -m cp -r -n /stockapp/data/grouped_daily_json gs://stock-data-project-kho
 gsutil cp gs://stock-data-project-khoa/stock.db /stockapp/data/stock.db
 python3 /stockapp/src/etl_grouped_daily.py
 gsutil cp /stockapp/data/stock.db gs://stock-data-project-khoa
+python3 /stockapp/src/bigquery.py
 rm /stockapp/data/grouped_daily_json/*
 rm /stockapp/data/stock.db
 echo $(date +"Container run ended at: %c")
 ```
 
 ### ETL Process
-The `get_grouped_daily.py` script makes the API call, and saves JSON response to the storage bucket. The `etl_grouped_daily.py` script loads the JSON response, does some light processing, and insert the data into the SQLite metadatabase file.
+From the shell script displayed above: 
+- The `get_grouped_daily.py` script makes the API call, and saves JSON response to the storage bucket. 
+- The `etl_grouped_daily.py` script loads the JSON response, does some light processing, and insert the data into the SQLite metadatabase file.
 
 ![](/images/posts/stock-analysis/db-browser.png "DB Sample")
 
 The data is inserted into the `daily` table. As we can see, each line contains the OHLC prices of a particular ticker in a particular day. 
+
+- The `bigquery.py` writes a smaller table into BigQuery for quick analysis by only considering data for tickers AAPL, AMZN, GOOG, META, NFLX. As shown below, the data can then be displayed by connecting it to a Looker Studio report.
+
+![](/images/posts/stock-analysis/close-price.png "Daily Close Price")
+
+
+
 

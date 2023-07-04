@@ -61,7 +61,7 @@ nav {
   margin-bottom: 40px;
 }
 
-ul {
+nav ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -177,11 +177,17 @@ table {
   padding: 3px 10px;
 }
 
-.post-body ul,
-ol {
+.post-body ol
+ {
   font-size: 110%;
   line-height: 2.3;
   font-weight: bold;
+  margin: 10px 0;
+  padding-left: 3%;
+}
+
+.post-body ul
+ {
   margin: 10px 0;
   padding-left: 3%;
 }
