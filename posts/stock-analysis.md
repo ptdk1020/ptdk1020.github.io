@@ -11,6 +11,7 @@ _*This post is still being updated*_
 1. [Overview](#overview)
 2. [Setup](#setup)
 3. [Workflow](#workflow)
+4. [Forecasting Specifics](#forecasting)
 
 ## Overview <a name="overview"></a>
 I thought it would be fun to create my own end-to-end cloud-based application to gather and analyze stock data. While the application code is kept on GCP Source Repositories, I also created a corresponding [Github repo](https://github.com/ptdk1020/stock-analysis) for future reference.
@@ -127,6 +128,144 @@ The data is inserted into the `daily` table. As we can see, each line contains t
 - The `bigquery.py` queries the `small_daily` table and writes it into BigQuery for quick analysis. The data can then be displayed by connecting the BigQuery table to a Looker Studio report. Below is the the historical close price for META as well as forecasting for several subsequent days.
 
 ![](/images/posts/stock-analysis/pred-close-price.png "Daily Close Price Prediction")
+
+
+## Forecasting Specifics <a name="forecasting"></a>
+### Data Processing
+Our model will be a sequence to label model. So we would need our dataset to be a context sequence of numbers coupled with the next number as the target, i.e., a labeled data point is a pair (context,target) where the context is essentially a sequence $(x_1,\dots,x_n)$ of numbers. In general, our data point is of the form
+$$
+\text{context} = (v_1,\dots, v_n), \quad \text{label} = v
+$$
+where $v_1,\dots, v_n, v \in \mathbb{R}^k$ with $k$ being the number of considered tickers. This number $k$ corresponds to the input dimension of our LSTM model. As a side note, usually, in text generation tasks, $k$ is the embedding dimension. Below is a simplified version of my data processing code.
+
+```python
+class DataPrep(Dataset):
+    def __init__(self,df,window_size,tickers_config_path=None):
+        self.window_size = window_size
+        self.data_index = df["date"].sort_values().unique().tolist()
+        self.tickers_config_path = tickers_config_path
+        self.tickers_config, self.data, self.data_normalized = self._generate_train_data(df)
+        self.windows_targets = self._generate_windowstargets()
+
+    def _generate_train_data(self, df):
+        tickers = sorted(df["ticker"].unique().tolist())
+        tickers_config = {}
+        tensors = []
+        tensors_normalized = []
+        for ticker in tickers:
+            series = df[df["ticker"]==ticker][["date","close_price"]]
+            series.sort_values(by="date",inplace=True)
+            series.set_index("date",inplace=True)
+            series = series["close_price"]
+            self.data_index = series.index.tolist()
+            
+            tensor = torch.tensor(series.values, dtype=torch.float32).unsqueeze(1)
+            tensors.append(tensor)
+            series_normalized, series_mean, series_std = normalize(series)
+            tickers_config[ticker] = {"mean":series_mean,"std":series_std}
+
+            tensor_normalized = torch.tensor(series_normalized.values, dtype=torch.float32).unsqueeze(1)
+            tensors_normalized.append(tensor_normalized)
+        return tickers_config, torch.cat(tensors, dim = -1), torch.cat(tensors_normalized, dim = -1)
+    
+    def _generate_windowstargets(self):
+        return [
+            (self.data_normalized[i:i+self.window_size],
+             self.data[i+self.window_size]
+            ) for i in range(len(self.data_normalized)-self.window_size)
+        ]
+    
+    def __len__(self):
+        return len(self.windows_targets)
+        
+
+    def __getitem__(self,ix):
+        window, target = self.windows_targets[ix]
+        return window, target
+```
+
+Note that $df$ is the ETL data and that $window_size$ is the sequence length $n$. In this processed data, for simplicity, the sequence lengths for all data points are the same. In general, this does not need to be the case. One additional point to note is that the context data is normalized.
+
+
+### Model
+
+Below is the LSTM model that I created together with the usual Pytorch training loop. As mentioned above, the input size is the number of tickers. This means that the model is a multivariate time series, and is capable to make a large amount of predictions at once. I only use 5 tickers, but it is simple to vary this number.
+
+```python
+class LSTMModel(nn.Module):
+    def __init__(self, input_size,hidden_size):
+        torch.manual_seed(0)
+        super().__init__()
+        self.config = {"input_size":input_size,"hidden_size":hidden_size}
+        self.lstm_layer = nn.LSTM(input_size=input_size, hidden_size=hidden_size,batch_first=True)
+        self.fc = nn.Linear(hidden_size, input_size)
+
+    def forward(self, x):
+        _, x = self.lstm_layer(x)
+        x = self.fc(x[0]).squeeze(0)
+        return x
+
+    def train_fn(self,dataloader,epochs=1000):
+        torch.manual_seed(0)
+        self.train()
+        loss_fn = nn.L1Loss()
+        optimizer = torch.optim.Adam(params=self.parameters(),lr=0.01)
+        for epoch in range(epochs):
+            train_iter = iter(dataloader)
+            epoch_loss = 0
+            for batch, (X,y) in enumerate(train_iter):
+                optimizer.zero_grad()
+                yhat = self(X)
+                loss = loss_fn(yhat,y)
+                epoch_loss += loss.item()
+                loss.backward()
+                optimizer.step()
+            epoch_loss = epoch_loss/len(train_iter)
+            if epoch % 100 == 0:
+                print(f"Epoch {epoch} loss: {epoch_loss}")
+
+    def predict(self,x):
+        self.eval()
+        with torch.inference_mode():
+            pred = self(x)
+        return pred
+```
+
+### Forecasting
+At forecasting time, I evaluate the historical predictions as well as forecast a few subsequent days. The (simplified) main forecast function is as follows:
+
+```python
+def main():
+    df = load_db_data(conn,sql_path)
+
+    # trainer will check the weekly config date to see if it needs to train
+    trainer(df,model_config_path,model_path,models_folder,train_config_path)
+    
+    # load inference dataset
+    dataset = load_inference_data(df,tickers_config_path,train_config_path)
+    # load model artifact
+    model = load_model(model_config_path,model_path)
+
+    # predict historical data
+    pred_historical = predict_historical_data(model,dataset)
+    # forecast
+    forecast = forecast_next_n(model,dataset)
+    # write to db
+    write_to_db(conn,dataset,df,forecast,pred_historical)
+```
+
+A good retraining approach is to monitor model health with loss function, and retrain if it performs outside a certain threshold. But, for simplicity, I set the model to retrain weekly. The historical predictions as well next day's forecast are done with short term forecasting, i.e., using the ground truth values to compute target. Beyond that, the predicted values are used in recursive fashion for long term forecasting.
+
+
+## Conclusion
+It was very fun to create my own stock analysis application. Now, every morning, I can simply go to my Looker Studio report to see the previous day's close prices for these tickers as well as subsequent days predictions. Of course, one would need to try different models, and apply additional techniques to make it a usable stock forecasting tool, as my goal was simply to create an end-to-end pipeline.
+
+To the reader, hope you had fun reading. Goodbye for now!
+
+
+
+
+
 
 
 
