@@ -120,10 +120,11 @@ From the shell script displayed above:
 
 The data is inserted into the `daily` table. As we can see, each line contains the OHLC prices of a particular ticker in a particular day. 
 
+- The `forecast.py` considers data for tickers AAPL, AMZN, GOOG, META, NFLX. It runs historical close price prediction as well as forecasting for the following days. The resulting data is stored the `small_daily` table in the metadatabase. Below is the historical close prices of these tickers.
+
 ![](/images/posts/stock-analysis/close-price.png "Daily Close Price")
 
-- The `forecast.py` considers data for tickers AAPL, AMZN, GOOG, META, NFLX. It runs historical close price prediction as well as forecasting for the following days. The resulting data is stored the `small_daily` table in the metadatabase.
-- The `bigquery.py` queries the `small_daily` table and writes it into BigQuery for quick analysis. The data can then be displayed by connecting the BigQuery table to a Looker Studio report.
+- The `bigquery.py` queries the `small_daily` table and writes it into BigQuery for quick analysis. The data can then be displayed by connecting the BigQuery table to a Looker Studio report. Below is the the historical close price for META as well as forecasting for several subsequent days.
 
 ![](/images/posts/stock-analysis/pred-close-price.png "Daily Close Price Prediction")
 
