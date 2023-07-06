@@ -184,7 +184,7 @@ class DataPrep(Dataset):
         return window, target
 ```
 
-Note that $df$ is the ETL data and that $window_size$ is the sequence length $n$. In this processed data, for simplicity, the sequence lengths for all data points are the same. In general, this does not need to be the case. One additional point to note is that the context data is normalized.
+Note that $df$ is the ETL data and that *window_size* is the sequence length $n$. In this processed data, for simplicity, the sequence lengths for all data points are the same. In general, this does not need to be the case. One additional point to note is that the context data is normalized.
 
 
 ### Model
