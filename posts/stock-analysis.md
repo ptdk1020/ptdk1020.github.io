@@ -5,8 +5,6 @@ excerp: ""
 cover_image: "/images/posts/stock-analysis/stock-cover.jpg"
 ---
 
-_*This post is still being updated*_
-
 ## Table of Contents
 1. [Overview](#overview)
 2. [Setup](#setup)
