@@ -1,6 +1,6 @@
 ---
 title: "Into the world of Large Language Models"
-date: "July 20 2023"
+date: "July 19 2023"
 excerp: ""
 cover_image: "/images/posts/langquest/llm-cover.jpg"
 ---
