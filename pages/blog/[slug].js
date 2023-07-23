@@ -20,7 +20,7 @@ export default function PostPage({frontmatter:{title,date,cover_image}, slug, co
     const div =     
                 <div className='card-page'>
                     <h1 className='post-title'>{title}</h1>
-                    <div>{date}</div>
+                    <div>Last Updated: {date}</div>
                     <img src={cover_image} className='post-image'/>
                     <div className='post-body'>
                         <Markdown contentHtml={contentHtml}/>
