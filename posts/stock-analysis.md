@@ -1,6 +1,6 @@
 ---
 title: "End-to-End Stock Data Analysis"
-date: "July 5, 2023"
+date: "2023-07-05"
 excerp: ""
 cover_image: "/images/posts/stock-analysis/stock-cover.jpg"
 ---

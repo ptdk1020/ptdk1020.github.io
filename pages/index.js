@@ -25,6 +25,12 @@ export async function getStaticProps(){
     return {slug,frontmatter}
   })
 
+  posts.sort(function(x,y){
+    let date_x = new Date(x.frontmatter.date)
+    let date_y = new Date(y.frontmatter.date)
+    return date_y - date_x
+  })
+
   return {
     props: {
       posts,

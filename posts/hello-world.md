@@ -1,6 +1,6 @@
 ---
 title: "Hello, World!"
-date: "June 13 2023"
+date: "2023-06-13"
 excerp: "A test post!"
 cover_image: "/images/posts/hello-world.jpg"
 ---
