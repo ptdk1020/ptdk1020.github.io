@@ -1,11 +1,11 @@
 ---
 title: "Into the world of Large Language Models"
-date: "2023-07-21"
+date: "2024-10-31"
 excerp: ""
 cover_image: "/images/posts/langquest/llm-cover.jpg"
 ---
 
-_*This post is still being updated*_
+**2024-10-31 Note: Happy Halloween! This post was started over a year ago. At the time, I intended to come back to finish it, but never did. Nevertheless, I decided to keep it here despite the fact that it is rather uninformative and severely out-of-date. I'll perhaps return in the future to reimagine its content.**
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -113,4 +113,4 @@ llm=LocalLLMWrapper()
 
 One cool thing to notice is that the LLM wrapper does not depend on the actual model loaded on server side. So, one can easily try different models without having to change the application code.
 
-*to be continued*
+---
